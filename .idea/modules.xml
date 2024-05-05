@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Bi.iml" filepath="$PROJECT_DIR$/.idea/Bi.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../BasicPython/.idea/HashtagTreinamentos.iml" filepath="$PROJECT_DIR$/../BasicPython/.idea/HashtagTreinamentos.iml" />
     </modules>
   </component>
 </project>
