@@ -38,6 +38,7 @@ print(IFrame(src="https://app.powerbi.com/reportEmbed?reportId=d71c6356-b975-4a3
 paginas = relatorio.get_pages()
 print(len(paginas))
 
+#Mostrar as páginas ocultas e tooltips(janelas ao passar o mouse encima do gráfico)
 for pagina in paginas:
     print("*" * 10)
     print(pagina)
@@ -46,8 +47,9 @@ for pagina in paginas:
 
 ### Vamos puxar agora 1 página: Relatório de Vendas
 print(relatorio_vendas)
-graficos = relatorio.visuals_on_page(relatorio_vendas['name'])
 
+#Pega os gráficos
+graficos = relatorio.visuals_on_page(relatorio_vendas['name'])#Pega todos visuais de uma página, e dizemos qual página através do 'name' da pagina
 for grafico in graficos:
     print("*" * 10)
     print(grafico)
@@ -58,26 +60,29 @@ for grafico in graficos:
 ### Pegar os gráficos de área (ou gráfico com determinada condição, como Título)
 print(grafico_area)
 
-### Exportar informações do Power BI para o Python
-infos_grafico = relatorio.export_visual_data(relatorio_vendas['name'], grafico_area['name'], rows=100)
+### Exportar informações do Power BI para o Python -> Transforma em um Dataframe
+infos_grafico = relatorio.export_visual_data(relatorio_vendas['name'], grafico_area['name'], rows=100)#Página, Gráfico, Quantas linhas(ex meses -> 12)
 print(infos_grafico)
 
 import pandas as pd
 from io import StringIO
-tabela = pd.read_csv(StringIO(infos_grafico))
+tabela = pd.read_csv(StringIO(infos_grafico))#StringIO -> Transforma a variavel de texto em um arquivo
 print(tabela)
 
 ### Outra forma de exportar
-infos_grafico2 = relatorio.export_visual_data(relatorio_vendas['name'], grafico_area['name'], rows=1000, export_data_type=1)
+infos_grafico2 = relatorio.export_visual_data(relatorio_vendas['name'], grafico_area['name'], rows=1000, export_data_type=1)#Página, Gráfico, Quantas linhas, =1 -> Ignora os filtros e exporta todas as medidas criadas, tirando os filtros
 print(infos_grafico2)
 
 tabela2 = pd.read_csv(StringIO(infos_grafico2))
 print(tabela2)
 
-#Trabalhar com Filtros
+
+#Trabalhar com Filtros -> Os filtros influenciam os dados que vamos obter
+
 #Identificar se tem um filtro aplicado:
 print(relatorio.get_filters())
 
+#Criação de um filtro de anos:
 def filter_report(Anos):
     anos_filter = {
         '$schema': "http://powerbi.com/product/schema#basic",
@@ -88,10 +93,10 @@ def filter_report(Anos):
         'operator': "In",
         'values': [Anos]
     }
-    relatorio.remove_filters()
-    relatorio.update_filters([anos_filter])
+    relatorio.remove_filters()#Retira todos os filtros
+    relatorio.update_filters([anos_filter])#Aplica o filtro de anos
 
-from ipywidgets import interact
+from ipywidgets import interact#Botão para interagir com o filtro
 interact(filter_report, Anos=[2016, 2017, 2018])
 
 ### Verificar slicers (ainda não funciona)
